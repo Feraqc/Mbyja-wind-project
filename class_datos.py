@@ -74,7 +74,11 @@ class datos():
   def get_values(self, opt):
     if opt == "density":
       request = "Proton_Density"
+<<<<<<< HEAD
+    elif opt == "speed":
+=======
     elif opt == "velocity":
+>>>>>>> 99fa241dddd9ac577a96829e9c6de1740196b5b2
       request = "Bulk_Speed"
     elif opt == "temperature":
       request = "Ion_Temperature"
@@ -83,40 +87,25 @@ class datos():
     resp = resp[request]
     return resp.values
 
-  def visualize_data(self):
-    host = host_subplot(111, axes_class=AA.Axes)
-    plt.subplots_adjust(right=0.75)
+  def visualize_data(self, opt):
+    if opt == "density":
+      request = "Proton_Density"
+      label = "Proton Density [p/cc]"
+    elif opt == "speed":
+      request = "Bulk_Speed"
+      label = "Bulk Speed [km/s]"
+    elif opt == "temperature":
+      request = "Ion_Temperature"
+      label = "Ion Temperature [K]"
 
-    par1 = host.twinx()
-    par2 = host.twinx()
-
-    offset = 60
-    new_fixed_axis = par2.get_grid_helper().new_fixed_axis
-    par2.axis["right"] = new_fixed_axis(loc="right",
-                                        axes=par2,
-                                        offset=(offset, 0))
-
-    par2.axis["right"].toggle(all=True)
-
-    #host.set_xlim(0, 2)
-    #host.set_ylim(0, 2)
-
-    host.set_xlabel("Hour")
-    host.set_ylabel("Proton Density")
-    par2.set_ylabel("Bulk Speed")
-    par1.set_ylabel("Ion Temperature")
-
+    fig, ax = plt.subplots()
+      
     x_axis = self.df.iloc[self.df.index.get_level_values('Date') == "{year}-{month}-{day}".format(year = self.year, month = self.month, day = self.day)]
-    p1, = host.plot(x_axis.reset_index()["Time"].apply(lambda x: x.split(":")[0]).astype(int), x_axis["Proton_Density"], label="Proton Density")
-    p2, = par1.plot(x_axis.reset_index()["Time"].apply(lambda x: x.split(":")[0]).astype(int), x_axis["Ion_Temperature"], label="Ion Temperature")
-    p3, = par2.plot(x_axis.reset_index()["Time"].apply(lambda x: x.split(":")[0]).astype(int), x_axis["Bulk_Speed"], label="Bulk Speed")
-
-    host.legend()
-
-    host.axis["left"].label.set_color(p1.get_color())
-    par1.axis["right"].label.set_color(p2.get_color())
-    par2.axis["right"].label.set_color(p3.get_color())
-
-    plt.draw()
+    horas = x_axis.reset_index()["Time"].apply(lambda x: x.split(":")[0]).astype(int)
+      
+    ax.plot(horas, x_axis[request])
+    ax.set_xlabel("Hours", fontdict = {'fontsize':14, 'fontweight':'bold', 'color':'tab:blue'})
+    ax.set_ylabel(label)
+    ax.grid(axis = 'y', color = 'gray', linestyle = 'dashed')
     plt.show()
     return
