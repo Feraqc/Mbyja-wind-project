@@ -74,11 +74,7 @@ class datos():
   def get_values(self, opt):
     if opt == "density":
       request = "Proton_Density"
-<<<<<<< HEAD
     elif opt == "speed":
-=======
-    elif opt == "velocity":
->>>>>>> 99fa241dddd9ac577a96829e9c6de1740196b5b2
       request = "Bulk_Speed"
     elif opt == "temperature":
       request = "Ion_Temperature"
@@ -104,7 +100,7 @@ class datos():
     horas = x_axis.reset_index()["Time"].apply(lambda x: x.split(":")[0]).astype(int)
       
     ax.plot(horas, x_axis[request])
-    ax.set_xlabel("Hours", fontdict = {'fontsize':14, 'fontweight':'bold', 'color':'tab:blue'})
+    ax.set_xlabel("{year}/{month}/{day}".format(year = self.year, month = self.month, day = self.day) + " - Hours of the day", fontdict = {'fontsize':14, 'fontweight':'bold', 'color':'tab:blue'})
     ax.set_ylabel(label)
     ax.grid(axis = 'y', color = 'gray', linestyle = 'dashed')
     plt.show()
