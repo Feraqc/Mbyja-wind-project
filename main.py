@@ -15,6 +15,8 @@ import requests
 from streamlit_lottie import st_lottie
 from lat_lon_lines import sun_coords
 import geocoder
+from audio_output import audio_output
+
 
 
 def load_lottie(url: str):
@@ -25,13 +27,6 @@ def load_lottie(url: str):
     return r.json()
 
 def wind_temp():
-
-    
-    d = st.date_input(
-        "PLease select a date",
-        datetime.date.today(),
-        key= 'temp')
-    st.write('You selected: ', d)
     
     if st.button('Simulate'):
 
@@ -56,32 +51,41 @@ def wind_temp():
         st.write('Click to begin simulation')
 
 def wind_vel():
-    d = st.date_input(
-    "PLease select a date",
-    datetime.date.today(),key='vel')
-    st.write('You selected: ', d)
+    
+    text_input = st.text_input("Enter frequency desired",key="audio")
+    if text_input:
+        st.write("You entered: ", text_input)
+        freq = int(text_input)
+        
+    
+    if st.button('Simulate',key='audio_butt'):
+        audio_output(freq)
+        
+    else:
+        st.write('Click to begin simulation')
+    
+    
+    
     
     vel_animation = load_lottie('https://assets7.lottiefiles.com/packages/lf20_zsn2p2gv.json')
     st_lottie(
         vel_animation,
-        speed=0.3
+        speed=0.3   
     )
     
-    
+def wind_dens():
+    pass
+
 
 st.title('Solar Wind')
 animation = load_lottie("https://assets8.lottiefiles.com/packages/lf20_m7xxkrvy.json")
 st_lottie(animation)
 
 g = geocoder.ip('me')
-print(g.latlng)
 
 
 
-text_input = st.text_input(
-                    "Enter your location in 'latitude longitude' format",
-                    key="lat_lon_input",
-    )
+text_input = st.text_input("Enter your location in 'latitude longitude' format",key="lat_lon_input",)
 
     
 if text_input:
@@ -91,10 +95,16 @@ if text_input:
 try:    
     lat = float(lat_lon[0])
     lon = float(lat_lon[1])
-    
     st.pyplot(sun_coords(lat,lon))
+    
 except:
     st.error("Please enter your location in 'latitud longitude' format")
+    
+d = st.date_input(
+    "PLease select a date",
+    datetime.date.today(),
+    key= 'date')
+st.write('You selected: ', d)
 
 
 
@@ -114,6 +124,6 @@ with tab1:
         ''')
     
         wind_temp()
-    
+      
 with tab3:
     wind_vel()
