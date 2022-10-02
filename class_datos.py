@@ -74,7 +74,11 @@ class datos():
   def get_values(self, opt):
     if opt == "density":
       request = "Proton_Density"
+<<<<<<< HEAD
     elif opt == "speed":
+=======
+    elif opt == "velocity":
+>>>>>>> 99fa241dddd9ac577a96829e9c6de1740196b5b2
       request = "Bulk_Speed"
     elif opt == "temperature":
       request = "Ion_Temperature"
