@@ -58,10 +58,11 @@ class datos():
             "S","Proton_Density","Bulk_Speed","Ion_Temperature"]
     self.df.columns = cols
     self.df = self.df.replace(to_replace=[-9999.9,-1.00e+05],value=[np.NaN, np.NaN]).dropna()
+    self.df["Time"] = pd.to_datetime(self.df["Seconds of the Day"], unit='s').dt.strftime('%H:%M')
     self.df["Date"] = pd.to_datetime(dict(year = self.df["Year"],
                                     month = self.df["Month"],
-                                    day = self.df["Day"]))
-    self.df["Time"] = pd.to_datetime(self.df["Seconds of the Day"], unit='s').dt.strftime('%H:%M')
+                                    day = self.df["Day"]))#,
+                                    #hours = self.df["Time"].apply(lambda x: x.split(":")[0])))
     index = pd.MultiIndex.from_frame(self.df[["Date","Time"]])
     self.df = self.df.set_index(index).drop(columns = ["Year", "Month", "Day","Date","Modified Julian Day","Seconds of the Day","Time"])
     self.df = self.norm_dataset(self.df)
@@ -69,3 +70,15 @@ class datos():
 
   def norm_dataset(self, df):
     return (df - df.min()) / ( df.max() - df.min())
+
+  def get_values(self, opt):
+    if opt == "density":
+      request = "Proton_Density"
+    elif opt == "velocity":
+      request = "Bulk_Velocity"
+    elif opt == "temperature":
+      request = "Ion_Temperature"
+
+    resp = self.df.iloc[self.df.index.get_level_values('Date') == "{year}-{month}-{day}".format(year = self.year, month = self.month, day = self.day)]
+    resp = resp[request]
+    return resp.values
