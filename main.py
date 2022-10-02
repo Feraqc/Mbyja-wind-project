@@ -13,6 +13,8 @@ import datetime
 import json
 import requests
 from streamlit_lottie import st_lottie
+from lat_lon_lines import sun_coords
+import geocoder
 
 
 def load_lottie(url: str):
@@ -71,6 +73,28 @@ st.title('Solar Wind')
 animation = load_lottie("https://assets8.lottiefiles.com/packages/lf20_m7xxkrvy.json")
 st_lottie(animation)
 
+g = geocoder.ip('me')
+print(g.latlng)
+
+
+
+text_input = st.text_input(
+                    "Enter your location in 'latitude longitude' format",
+                    key="lat_lon_input",
+    )
+
+    
+if text_input:
+        st.write("You entered: ", text_input)
+        lat_lon = list(text_input.split(' '))
+        
+try:    
+    lat = float(lat_lon[0])
+    lon = float(lat_lon[1])
+    
+    st.pyplot(sun_coords(lat,lon))
+except:
+    st.error("Please enter your location in 'latitud longitude' format")
 
 
 
