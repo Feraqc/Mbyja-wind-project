@@ -75,7 +75,7 @@ class datos():
     if opt == "density":
       request = "Proton_Density"
     elif opt == "velocity":
-      request = "Bulk_Velocity"
+      request = "Bulk_Speed"
     elif opt == "temperature":
       request = "Ion_Temperature"
 
