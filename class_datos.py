@@ -111,9 +111,6 @@ class datos():
     p2, = par1.plot(x_axis.reset_index()["Time"].apply(lambda x: x.split(":")[0]).astype(int), x_axis["Ion_Temperature"], label="Ion Temperature")
     p3, = par2.plot(x_axis.reset_index()["Time"].apply(lambda x: x.split(":")[0]).astype(int), x_axis["Bulk_Speed"], label="Bulk Speed")
 
-    #par1.set_ylim(0, 4)
-    #par2.set_ylim(1, 65)
-
     host.legend()
 
     host.axis["left"].label.set_color(p1.get_color())
