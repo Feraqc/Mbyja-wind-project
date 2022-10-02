@@ -57,7 +57,7 @@ class datos():
     cols = ["Year","Month","Day","Time","Modified Julian Day","Seconds of the Day",
             "S","Proton_Density","Bulk_Speed","Ion_Temperature"]
     self.df.columns = cols
-    self.df = self.df.replace(to_replace=[-9999.9,-1.00e+05],value=[np.NaN, np.NaN]).dropna()
+    self.df = self.df.replace(to_replace=[-9999.9,-1.00e+05],value=[np.NaN, np.NaN]).bfill()
     self.df["Time"] = pd.to_datetime(self.df["Seconds of the Day"], unit='s').dt.strftime('%H:%M')
     self.df["Date"] = pd.to_datetime(dict(year = self.df["Year"],
                                     month = self.df["Month"],
