@@ -83,6 +83,40 @@ class datos():
     resp = resp[request]
     return resp.values
 
+  def visualize_data(self):
+    host = host_subplot(111, axes_class=AA.Axes)
+    plt.subplots_adjust(right=0.75)
 
+    par1 = host.twinx()
+    par2 = host.twinx()
 
-#"https://sohoftp.nascom.nasa.gov/sdb/goes/ace/monthly/202209_ace_swepam_1h.txt"
+    offset = 60
+    new_fixed_axis = par2.get_grid_helper().new_fixed_axis
+    par2.axis["right"] = new_fixed_axis(loc="right",
+                                        axes=par2,
+                                        offset=(offset, 0))
+
+    par2.axis["right"].toggle(all=True)
+
+    #host.set_xlim(0, 2)
+    #host.set_ylim(0, 2)
+
+    host.set_xlabel("Hour")
+    host.set_ylabel("Proton Density")
+    par2.set_ylabel("Bulk Speed")
+    par1.set_ylabel("Ion Temperature")
+
+    x_axis = self.df.iloc[self.df.index.get_level_values('Date') == "{year}-{month}-{day}".format(year = self.year, month = self.month, day = self.day)]
+    p1, = host.plot(x_axis.reset_index()["Time"].apply(lambda x: x.split(":")[0]).astype(int), x_axis["Proton_Density"], label="Proton Density")
+    p2, = par1.plot(x_axis.reset_index()["Time"].apply(lambda x: x.split(":")[0]).astype(int), x_axis["Ion_Temperature"], label="Ion Temperature")
+    p3, = par2.plot(x_axis.reset_index()["Time"].apply(lambda x: x.split(":")[0]).astype(int), x_axis["Bulk_Speed"], label="Bulk Speed")
+
+    host.legend()
+
+    host.axis["left"].label.set_color(p1.get_color())
+    par1.axis["right"].label.set_color(p2.get_color())
+    par2.axis["right"].label.set_color(p3.get_color())
+
+    plt.draw()
+    plt.show()
+    return
