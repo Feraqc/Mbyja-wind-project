@@ -10,7 +10,7 @@ class datos():
     self.year = year
     self.month = month
     self.day = day
-    self.path = "https://sohoftp.nascom.nasa.gov/sdb/goes/ace/monthly/{year}{month}_ace_swepam_1h.txt".format(year = self.year, month = self.month)
+    self.path = self.create_path()
     self.df = pd.DataFrame()
     self.create_dataset()
 
@@ -34,12 +34,22 @@ class datos():
   def set_day(self, new_day):
     self.day = new_day
     return
-    
+  
+  def create_path(self):
+    path = "https://sohoftp.nascom.nasa.gov/sdb/goes/ace/monthly/{year}{month}_ace_swepam_1h.txt".format(year = self.year, month = self.month)
+    return path
+
   def get_dataset(self):
     return self.df
 
+  def set_date(self, year, month, day):
+    self.set_year(year)
+    self.set_month(month)
+    self.set_day(day)
+    self.set_dataset()
+
   def set_dataset(self):
-    self.path = "https://sohoftp.nascom.nasa.gov/sdb/goes/ace/monthly/{year}{month}_ace_swepam_1h.txt".format(year = self.year, month = self.month)
+    self.path = self.create_path()
     self.create_dataset()
 
   def create_dataset(self):
@@ -54,4 +64,8 @@ class datos():
     self.df["Time"] = pd.to_datetime(self.df["Seconds of the Day"], unit='s').dt.strftime('%H:%M')
     index = pd.MultiIndex.from_frame(self.df[["Date","Time"]])
     self.df = self.df.set_index(index).drop(columns = ["Year", "Month", "Day","Date","Modified Julian Day","Seconds of the Day","Time"])
+    self.df = self.norm_dataset(self.df)
     return self.df
+
+  def norm_dataset(self, df):
+    return (df - df.min()) / ( df.max() - df.min())
