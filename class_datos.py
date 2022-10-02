@@ -65,7 +65,7 @@ class datos():
                                     #hours = self.df["Time"].apply(lambda x: x.split(":")[0])))
     index = pd.MultiIndex.from_frame(self.df[["Date","Time"]])
     self.df = self.df.set_index(index).drop(columns = ["Year", "Month", "Day","Date","Modified Julian Day","Seconds of the Day","Time"])
-    self.df = self.norm_dataset(self.df)
+    #self.df = self.norm_dataset(self.df)
     return self.df
 
   def norm_dataset(self, df):
@@ -82,3 +82,7 @@ class datos():
     resp = self.df.iloc[self.df.index.get_level_values('Date') == "{year}-{month}-{day}".format(year = self.year, month = self.month, day = self.day)]
     resp = resp[request]
     return resp.values
+
+
+
+#"https://sohoftp.nascom.nasa.gov/sdb/goes/ace/monthly/202209_ace_swepam_1h.txt"
