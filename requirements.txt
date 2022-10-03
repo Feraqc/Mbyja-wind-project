@@ -95,7 +95,6 @@ soupsieve==2.3.2.post1
 SQLAlchemy==1.4.41
 streamlit==1.13.0
 streamlit-lottie==0.0.3
-sunpy==4.0.5
 tifffile==2022.8.12
 toml==0.10.2
 toolz==0.12.0
