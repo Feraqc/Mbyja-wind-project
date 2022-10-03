@@ -57,7 +57,7 @@ class datos():
     cols = ["Year","Month","Day","Time","Modified Julian Day","Seconds of the Day",
             "S","Proton_Density","Bulk_Speed","Ion_Temperature"]
     self.df.columns = cols
-    self.df = self.df.replace(to_replace=[-9999.9,-1.00e+05],value=[np.NaN, np.NaN]).bfill()
+    self.df = self.df.replace(to_replace=[-9999.9,-1.00e+05],value=[np.NaN, np.NaN]).ffill().bfill()
     self.df["Time"] = pd.to_datetime(self.df["Seconds of the Day"], unit='s').dt.strftime('%H:%M')
     self.df["Date"] = pd.to_datetime(dict(year = self.df["Year"],
                                     month = self.df["Month"],
@@ -103,5 +103,5 @@ class datos():
     ax.set_xlabel("{year}/{month}/{day}".format(year = self.year, month = self.month, day = self.day) + " - Hours of the day", fontdict = {'fontsize':14, 'fontweight':'bold', 'color':'tab:blue'})
     ax.set_ylabel(label)
     ax.grid(axis = 'y', color = 'gray', linestyle = 'dashed')
-    plt.show()
-    return
+    return fig
+
