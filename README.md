@@ -1,2 +1,4 @@
-# Instal all requirements from requirements.txt
-# Run streamlit run main.py 
+
+
+  instal all requirements from requirements.txt
+  execute streamlit run main.py 
